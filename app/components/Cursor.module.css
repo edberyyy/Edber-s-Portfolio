@@ -1,0 +1,42 @@
+.dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 7px; height: 7px;
+  background: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  margin-left: -3.5px;
+  margin-top:  -3.5px;
+  transition: width 0.25s, height 0.25s, background 0.25s, margin 0.25s;
+}
+
+.dotActive {
+  width: 0; height: 0;
+  background: transparent;
+  margin-left: 0; margin-top: 0;
+}
+
+.ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform;
+  margin-left: -18px;
+  margin-top:  -18px;
+  opacity: 0.45;
+  transition: width 0.3s, height 0.3s, margin 0.3s, opacity 0.3s, border-color 0.3s;
+}
+
+.ringActive {
+  width: 52px; height: 52px;
+  margin-left: -26px;
+  margin-top:  -26px;
+  opacity: 0.2;
+  border-color: var(--gold);
+}
