@@ -1,28 +1,18 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
     const { name, email, subject, message } = await request.json();
 
-    // ╔════════════════════════════════════════════════════════════╗
-    // ║  CONFIGURE YOUR EMAIL HERE                                ║
-    // ║  Replace 'your-email@gmail.com' with your email address  ║
-    // ║  Add your app password in .env.local                      ║
-    // ╚════════════════════════════════════════════════════════════╝
-    const transporter = nodemailer.createTransport({
-      service: 'gmail', // or another SMTP service
-      auth: {
-        user: process.env.EMAIL_USER, // Your email (add to .env.local)
-        pass: process.env.EMAIL_PASS, // Your app password (add to .env.local)
-      },
-    });
-
     // Send email to YOUR inbox
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // 👈 YOUR EMAIL ADDRESS GOES HERE
+    await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: 'ejbm1027@gmail.com',
       subject: `New Contact Form: ${subject}`,
+      replyTo: email,
       html: `
         <h2>New Message from Your Portfolio</h2>
         <p><strong>Name:</strong> ${name}</p>
@@ -31,12 +21,11 @@ export async function POST(request: NextRequest) {
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
       `,
-      replyTo: email, // Reply directly to visitor
     });
 
-    // Optional: Send confirmation email to visitor
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    // Send confirmation email to visitor
+    await resend.emails.send({
+      from: 'Edber John <onboarding@resend.dev>',
       to: email,
       subject: 'I received your message!',
       html: `
