@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageLayout from "../components/PageLayout";
+import SubjectDropdown from "../components/SubjectDropdown";
 import styles from "./contact.module.css";
 
 export default function ContactPage() {
@@ -140,22 +141,11 @@ export default function ContactPage() {
             </div>
             <div className={styles.field}>
               <label className={styles.fieldLabel}>Subject</label>
-              <select
-                className={styles.input}
-                name="subject"
+              <SubjectDropdown
                 value={formData.subject}
-                onChange={handleChange}
+                onChange={(value) => setFormData({ ...formData, subject: value })}
                 required
-              >
-                <option value="">Select a topic</option>
-                <option value="project">Project Opportunity</option>
-                <option value="collaboration">Collaboration / Partnership</option>
-                <option value="freelance">Freelance Work</option>
-                <option value="mentorship">Mentorship / Guidance</option>
-                <option value="feedback">Feedback / Review</option>
-                <option value="question">Question / Inquiry</option>
-                <option value="other">Other (please specify)</option>
-              </select>
+              />
               {formData.subject === "other" && (
                 <input
                   className={styles.input}
