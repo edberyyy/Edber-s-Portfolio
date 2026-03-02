@@ -23,18 +23,23 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    // Send confirmation email to visitor
-    await resend.emails.send({
-      from: 'Edber John <onboarding@resend.dev>',
-      to: email,
-      subject: 'I received your message!',
-      html: `
-        <h2>Thanks for reaching out!</h2>
-        <p>Hi ${name},</p>
-        <p>I've received your message and will get back to you soon.</p>
-        <p>Best regards,<br>Edber John</p>
-      `,
-    });
+    // Send confirmation email to visitor (best-effort — may fail on Resend free plan)
+    try {
+      await resend.emails.send({
+        from: 'Edber John <onboarding@resend.dev>',
+        to: email,
+        subject: 'I received your message!',
+        html: `
+          <h2>Thanks for reaching out!</h2>
+          <p>Hi ${name},</p>
+          <p>I've received your message and will get back to you soon.</p>
+          <p>Best regards,<br>Edber John</p>
+        `,
+      });
+    } catch (confirmError) {
+      // Non-fatal: main notification already sent
+      console.warn('Confirmation email failed (expected on free plan):', confirmError);
+    }
 
     return NextResponse.json({ success: true, message: 'Email sent!' }, { status: 200 });
   } catch (error) {
