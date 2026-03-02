@@ -1,10 +1,15 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) throw new Error('Missing RESEND_API_KEY environment variable');
+  return new Resend(key);
+}
 
 export async function POST(request: NextRequest) {
   try {
+    const resend = getResend();
     const { name, email, subject, message } = await request.json();
 
     // Send email to YOUR inbox
